@@ -1,0 +1,32 @@
+{
+    "$schema": "https://charm.land/crush.json",
+    "options": {
+        "initialize_as": "AGENTS.md"
+    },
+    "mcpServers": {
+        "time-tools": {
+            "command": ".venv/bin/python3",
+            "args": [
+                "mcps/time_tools.py"
+            ]
+        },
+        "slack-tools": {
+            "command": ".venv/bin/python3",
+            "args": [
+                "mcps/slack_notify.py"
+            ]
+        },
+        "coinank-tools": {
+            "command": ".venv/bin/python3",
+            "args": [
+                "mcps/coinank.py"
+            ]
+        },
+        "binance-futures": {
+            "command": ".venv/bin/python3",
+            "args": [
+                "mcps/binance_futures.py"
+            ]
+        }
+    }
+}

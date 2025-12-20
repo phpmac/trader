@@ -348,7 +348,7 @@ def _handle_error(e: Exception) -> str:
         "openWorldHint": True,
     },
 )
-def binance_get_balance(params: GetBalanceInput) -> str:
+def binance_get_balance(params: GetBalanceInput = GetBalanceInput()) -> str:
     """
     查询币安 USDT 合约账户余额
 
@@ -402,7 +402,7 @@ def binance_get_balance(params: GetBalanceInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_get_positions(params: GetPositionsInput) -> str:
+def binance_get_positions(params: GetPositionsInput = GetPositionsInput()) -> str:
     """
     查询币安 USDT 合约持仓信息
 
@@ -842,7 +842,7 @@ def binance_cancel_all_orders(params: CancelAllOrdersInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_get_open_orders(params: GetOpenOrdersInput) -> str:
+def binance_get_open_orders(params: GetOpenOrdersInput = GetOpenOrdersInput()) -> str:
     """
     查询当前挂单
 
