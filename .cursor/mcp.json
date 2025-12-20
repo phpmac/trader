@@ -6,6 +6,12 @@
         "mcps/time_tools.py"
       ]
     },
+    "slack-tools": {
+      "command": ".venv/bin/python3",
+      "args": [
+        "mcps/slack_notify.py"
+      ]
+    },
     "coinank-tools": {
       "command": ".venv/bin/python3",
       "args": [

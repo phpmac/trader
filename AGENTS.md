@@ -214,6 +214,7 @@ description: 技能描述    # 描述技能用途和触发条件
 | `time-tools` | `mcps/time_tools.py` | 时间工具 - 获取 CST 时间, 检查交易时段 |
 | `coinank-tools` | `mcps/coinank.py` | Coinank 数据 - 行情/持仓/CVD/资金流等 |
 | `binance-futures` | `mcps/binance_futures.py` | 币安合约 - 账户/持仓/下单/平仓等 |
+| `slack-tools` | `mcps/slack_notify.py` | Slack 通知 - 交易通知/风险预警 |
 
 ### 常用工具速查
 
@@ -226,6 +227,7 @@ description: 技能描述    # 描述技能用途和触发条件
 | `binance_get_positions` | binance-futures | 查询当前持仓 |
 | `binance_place_order` | binance-futures | 下单 |
 | `binance_close_position` | binance-futures | 平仓 |
+| `slack_send_message` | slack-tools | 发送 Slack 通知 |
 
 ## 目录结构
 
@@ -255,7 +257,8 @@ trader/
 └── mcps/               # MCP 服务器 (交易工具)
     ├── time_tools.py       # 时间工具 MCP 服务
     ├── coinank.py          # Coinank 数据 MCP 服务
-    └── binance_futures.py  # 币安 USDT-M 合约交易 MCP 服务
+    ├── binance_futures.py  # 币安 USDT-M 合约交易 MCP 服务
+    └── slack_notify.py     # Slack 通知 MCP 服务
 ```
 
 ## 默认交易方法
@@ -273,7 +276,6 @@ trader/
 - 交易涉及真金白银, 所有代码修改必须谨慎
 - 不确定的功能必须先讨论方案
 - 实盘代码必须有完整的异常处理和回退机制
-- 任何涉及资金的操作都需要交易员确认
 - **交易分析时必须尽可能使用 MCP 提供的工具**, 获取实时行情、订单簿深度、K线数据等, 以确保分析基于最新市场数据, 获得更好的盈亏比
 - **MCP 工具调用出现代码错误时 (如 AttributeError、TypeError 等), 必须停止当前任务, 报告错误并等待交易员修复**, 不要尝试绕过或使用其他方式继续
 - 本文档 (AGENTS.md) 可随时进化更新, 但修改前必须经过交易员人工确认

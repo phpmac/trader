@@ -59,7 +59,7 @@ BINANCE_USE_TESTNET=false
 | `binance_change_leverage` | 设置杠杆倍数 | `symbol`, `leverage` (1-125) |
 | `binance_change_margin_type` | 设置保证金模式 | `symbol`, `margin_type` (ISOLATED/CROSSED) |
 
-### 交易类 (需确认)
+### 交易类
 
 | 工具名称 | 功能 | 关键参数 |
 |----------|------|----------|
@@ -186,19 +186,14 @@ binance_cancel_all_orders(symbol="BTCUSDT")
 
 ## 交易方向
 
-### 单向持仓模式 (BOTH)
-
-- **做多**: `side=BUY`
-- **平多**: `side=SELL` + `reduceOnly=true`
-- **做空**: `side=SELL`
-- **平空**: `side=BUY` + `reduceOnly=true`
-
-### 对冲模式 (LONG/SHORT)
+**账户使用对冲模式 (Hedge Mode)**, 所有交易操作必须指定 `positionSide` 参数:
 
 - **开多**: `side=BUY` + `positionSide=LONG`
 - **平多**: `side=SELL` + `positionSide=LONG`
 - **开空**: `side=SELL` + `positionSide=SHORT`
 - **平空**: `side=BUY` + `positionSide=SHORT`
+
+> 注意: 不要使用 `positionSide=BOTH`, 会报错 `-4061`
 
 ---
 

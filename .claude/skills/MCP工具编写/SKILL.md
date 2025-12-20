@@ -152,31 +152,6 @@ def handle_api_error(e: Exception) -> str:
     return f"Error: {type(e).__name__}: {str(e)}"
 ```
 
-### 模拟交易模式
-
-```python
-import os
-
-# 重要: 未经验证的策略只能使用模拟模式
-SIMULATION_MODE = os.environ.get("TRADING_SIMULATION", "true").lower() == "true"
-
-@mcp.tool(name="binance_place_order")
-async def binance_place_order(params: PlaceOrderInput) -> str:
-    """下单工具 - 默认为模拟模式"""
-    if SIMULATION_MODE:
-        return json.dumps({
-            "mode": "SIMULATION",
-            "message": "订单已模拟, 未实际执行",
-            "order": params.model_dump()
-        })
-    
-    # 实盘模式需要额外确认
-    if not params.confirm_real_order:
-        raise ValueError("实盘下单需要设置 confirm_real_order=True")
-    
-    # 执行真实下单...
-```
-
 ---
 
 ## 运行与测试

@@ -292,6 +292,38 @@ def _get_client() -> UMFutures:
     return UMFutures(key=api_key, secret=api_secret)
 
 
+def _is_hedge_mode(client: UMFutures) -> bool:
+    """检查账户是否为对冲模式 (双向持仓)"""
+    result = client.get_position_mode()
+    return result.get("dualSidePosition", False)
+
+
+def _auto_position_side(
+    client: UMFutures, side: OrderSide, position_side: PositionSide
+) -> PositionSide:
+    """
+    自动确定 positionSide
+
+    - 单向持仓模式: 始终返回 BOTH
+    - 对冲模式: 根据订单方向自动设置
+      - BUY 开仓 -> LONG
+      - SELL 开仓 -> SHORT
+    """
+    if position_side != PositionSide.BOTH:
+        # 用户明确指定了, 直接使用
+        return position_side
+
+    if not _is_hedge_mode(client):
+        # 单向持仓模式, 使用 BOTH
+        return PositionSide.BOTH
+
+    # 对冲模式, 根据订单方向自动设置
+    if side == OrderSide.BUY:
+        return PositionSide.LONG
+    else:
+        return PositionSide.SHORT
+
+
 def _handle_error(e: Exception) -> str:
     """统一错误处理"""
     if isinstance(e, ClientError):
@@ -508,16 +540,28 @@ def binance_place_order(params: PlaceOrderInput) -> str:
 
     做多流程: side=BUY, 平多用 side=SELL + reduceOnly=true
     做空流程: side=SELL, 平空用 side=BUY + reduceOnly=true
+
+    注意: positionSide 会根据账户模式自动设置
+    - 单向持仓模式: 使用 BOTH
+    - 对冲模式: BUY -> LONG, SELL -> SHORT (开仓时)
     """
     try:
         client = _get_client()
+
+        # 自动确定 positionSide (仅开仓时自动设置, reduceOnly 平仓时需要正确的方向)
+        position_side = params.position_side
+        if not params.reduce_only and not params.close_position:
+            # 开仓时自动设置
+            position_side = _auto_position_side(
+                client, params.side, params.position_side
+            )
 
         order_params: dict[str, Any] = {
             "symbol": params.symbol,
             "side": params.side.value,
             "type": params.order_type.value,
             "quantity": params.quantity,
-            "positionSide": params.position_side.value,
+            "positionSide": position_side.value,
         }
 
         # 限价单需要价格和有效期
@@ -544,7 +588,7 @@ def binance_place_order(params: PlaceOrderInput) -> str:
             order_params["workingType"] = params.working_type.value
 
         # 平仓相关 (单向持仓模式才需要 reduceOnly, 对冲模式不支持)
-        if params.reduce_only and params.position_side == PositionSide.BOTH:
+        if params.reduce_only and position_side == PositionSide.BOTH:
             order_params["reduceOnly"] = "true"
         if params.close_position:
             order_params["closePosition"] = "true"
