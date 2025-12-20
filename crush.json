@@ -3,26 +3,34 @@
     "options": {
         "initialize_as": "AGENTS.md"
     },
-    "mcpServers": {
+    "mcp": {
         "time-tools": {
+            "type": "stdio",
+            "timeout": 10,
             "command": ".venv/bin/python3",
             "args": [
                 "mcps/time_tools.py"
             ]
         },
         "slack-tools": {
+            "type": "stdio",
+            "timeout": 10,
             "command": ".venv/bin/python3",
             "args": [
                 "mcps/slack_notify.py"
             ]
         },
         "coinank-tools": {
+            "type": "stdio",
+            "timeout": 10,
             "command": ".venv/bin/python3",
             "args": [
                 "mcps/coinank.py"
             ]
         },
         "binance-futures": {
+            "type": "stdio",
+            "timeout": 10,
             "command": ".venv/bin/python3",
             "args": [
                 "mcps/binance_futures.py"
