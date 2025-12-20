@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "time-tools": {
+      "command": ".venv/bin/python3",
+      "args": [
+        "mcps/time_tools.py"
+      ]
+    },
+    "coinank-tools": {
+      "command": ".venv/bin/python3",
+      "args": [
+        "mcps/coinank.py"
+      ]
+    },
+    "binance-futures": {
+      "command": ".venv/bin/python3",
+      "args": [
+        "mcps/binance_futures.py"
+      ]
+    }
+  }
+}
