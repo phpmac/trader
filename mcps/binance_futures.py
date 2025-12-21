@@ -72,6 +72,7 @@ class TimeInForce(str, Enum):
     IOC = "IOC"  # Immediate or Cancel 立即成交或取消
     FOK = "FOK"  # Fill or Kill 全部成交或取消
     GTX = "GTX"  # Post Only 只做maker
+    GTD = "GTD"  # Good Till Date 指定时间前有效
 
 
 class WorkingType(str, Enum):
@@ -164,6 +165,11 @@ class PlaceOrderInput(BaseModel):
     )
     time_in_force: TimeInForce = Field(
         default=TimeInForce.GTC, description="订单有效期", alias="timeInForce"
+    )
+    good_till_date: Optional[int] = Field(
+        default=None,
+        description="GTD 订单自动取消时间 (Unix 时间戳, 毫秒). 仅当 timeInForce=GTD 时有效",
+        alias="goodTillDate",
     )
     reduce_only: bool = Field(
         default=False, description="是否只减仓", alias="reduceOnly"
@@ -548,6 +554,21 @@ def binance_place_order(params: PlaceOrderInput) -> str:
     - STOP: 止损限价单 (需指定 price 和 stopPrice)
     - TAKE_PROFIT: 止盈限价单 (需指定 price 和 stopPrice)
 
+    订单有效期 (timeInForce):
+    - GTC: Good Till Cancel, 成交为止
+    - IOC: Immediate or Cancel, 立即成交或取消
+    - FOK: Fill or Kill, 全部成交或取消
+    - GTX: Post Only, 只做 maker
+    - GTD: Good Till Date, 指定时间前有效 (需配合 goodTillDate 参数)
+
+    开仓限价单默认行为:
+    - 开仓限价单 (type=LIMIT, reduceOnly=false) 默认使用 GTD + 1 小时有效期
+    - 如需更长有效期, 可手动指定 timeInForce=GTD + goodTillDate
+    - 如需永久有效, 可手动指定 timeInForce=GTC + goodTillDate=任意值 (绕过默认)
+
+    平仓/止损/止盈限价单:
+    - 不受此限制, 默认使用 GTC (永久有效直到成交或取消)
+
     做多流程: side=BUY, 平多用 side=SELL + reduceOnly=true
     做空流程: side=SELL, 平空用 side=BUY + reduceOnly=true
 
@@ -585,7 +606,44 @@ def binance_place_order(params: PlaceOrderInput) -> str:
             if params.price is None:
                 return "Error: 限价单必须指定 price"
             order_params["price"] = params.price
-            order_params["timeInForce"] = params.time_in_force.value
+
+            # 判断是否为开仓限价单 (非 reduceOnly, 非 closePosition, 类型为 LIMIT)
+            is_open_limit_order = (
+                params.order_type == OrderType.LIMIT
+                and not params.reduce_only
+                and not params.close_position
+            )
+
+            # 开仓限价单: 默认使用 GTD + 1 小时有效期
+            if is_open_limit_order:
+                import time
+
+                time_in_force = params.time_in_force
+                good_till_date = params.good_till_date
+
+                # 如果未指定 timeInForce 或使用默认 GTC, 自动改为 GTD + 1 小时
+                if time_in_force == TimeInForce.GTC and good_till_date is None:
+                    time_in_force = TimeInForce.GTD
+                    good_till_date = int(time.time() * 1000) + 3600 * 1000  # 1 小时后
+
+                order_params["timeInForce"] = time_in_force.value
+
+                if time_in_force == TimeInForce.GTD:
+                    if good_till_date is None:
+                        return (
+                            "Error: GTD 订单必须指定 goodTillDate (Unix 时间戳, 毫秒)"
+                        )
+                    order_params["goodTillDate"] = good_till_date
+            else:
+                # 平仓限价单或止损止盈限价单: 使用用户指定的 timeInForce
+                order_params["timeInForce"] = params.time_in_force.value
+
+                if params.time_in_force == TimeInForce.GTD:
+                    if params.good_till_date is None:
+                        return (
+                            "Error: GTD 订单必须指定 goodTillDate (Unix 时间戳, 毫秒)"
+                        )
+                    order_params["goodTillDate"] = params.good_till_date
 
         # 止损/止盈单需要触发价格
         if params.order_type in (
