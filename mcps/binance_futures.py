@@ -155,7 +155,7 @@ class PlaceOrderInput(BaseModel):
         description="订单类型",
         alias="type",
     )
-    quantity: float = Field(..., description="下单数量", gt=0)
+    quantity: Optional[float] = Field(default=None, description="下单数量")
     price: Optional[float] = Field(default=None, description="限价单价格", gt=0)
     position_side: PositionSide = Field(
         default=PositionSide.BOTH,
@@ -275,6 +275,16 @@ class GetOpenOrdersInput(BaseModel):
 
     symbol: Optional[str] = Field(
         default=None, description="交易对 (如 BTCUSDT), 不传则返回所有挂单"
+    )
+
+
+class GetOpenAlgoOrdersInput(BaseModel):
+    """查询当前条件单输入"""
+
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    symbol: Optional[str] = Field(
+        default=None, description="交易对 (如 BTCUSDT), 不传则返回所有条件单"
     )
 
 
@@ -560,9 +570,11 @@ def binance_place_order(params: PlaceOrderInput) -> str:
             "symbol": params.symbol,
             "side": params.side.value,
             "type": params.order_type.value,
-            "quantity": params.quantity,
             "positionSide": position_side.value,
         }
+
+        if params.quantity is not None:
+            order_params["quantity"] = params.quantity
 
         # 限价单需要价格和有效期
         if params.order_type in (
@@ -733,20 +745,24 @@ def binance_set_stop_loss_take_profit(params: SetStopLossTakeProfitInput) -> str
             # 空仓: 止损用买单, 止盈用买单
             side = OrderSide.BUY
 
-        # 使用 Algo Order API 设置条件单
-        # API endpoint: POST /fapi/v1/algo/futures/newOrderVp
-        algo_url = "/fapi/v1/algo/futures/newOrderVp"
+        # 使用新的 Algo Order API (2025-12-09 迁移后)
+        # POST /fapi/v1/algoOrder
+        import time
+
+        algo_url = "/fapi/v1/algoOrder"
 
         # 设置止损
         if params.stop_loss_price:
             sl_params = {
+                "algoType": "CONDITIONAL",
                 "symbol": params.symbol,
                 "side": side.value,
                 "positionSide": params.position_side.value,
+                "type": "STOP_MARKET",
                 "quantity": float(quantity),
                 "triggerPrice": params.stop_loss_price,
                 "workingType": params.working_type.value,
-                "reduceOnly": "true",
+                "timestamp": int(time.time() * 1000),
             }
             sl_result = client.sign_request("POST", algo_url, sl_params)
             results.append({"type": "STOP_LOSS", "order": sl_result})
@@ -754,13 +770,15 @@ def binance_set_stop_loss_take_profit(params: SetStopLossTakeProfitInput) -> str
         # 设置止盈
         if params.take_profit_price:
             tp_params = {
+                "algoType": "CONDITIONAL",
                 "symbol": params.symbol,
                 "side": side.value,
                 "positionSide": params.position_side.value,
+                "type": "TAKE_PROFIT_MARKET",
                 "quantity": float(quantity),
                 "triggerPrice": params.take_profit_price,
                 "workingType": params.working_type.value,
-                "reduceOnly": "true",
+                "timestamp": int(time.time() * 1000),
             }
             tp_result = client.sign_request("POST", algo_url, tp_params)
             results.append({"type": "TAKE_PROFIT", "order": tp_result})
@@ -884,6 +902,70 @@ def binance_get_open_orders(params: GetOpenOrdersInput = GetOpenOrdersInput()) -
                 "stopPrice": item.get("stopPrice"),
                 "positionSide": item.get("positionSide"),
                 "reduceOnly": item.get("reduceOnly"),
+            }
+            for item in result
+        ]
+
+        return json.dumps(filtered, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return _handle_error(e)
+
+
+@mcp.tool(
+    name="binance_get_open_algo_orders",
+    annotations={
+        "title": "查询当前条件单",
+        "readOnlyHint": True,
+        "destructiveHint": False,
+        "idempotentHint": True,
+        "openWorldHint": True,
+    },
+)
+def binance_get_open_algo_orders(
+    params: GetOpenAlgoOrdersInput = GetOpenAlgoOrdersInput(),
+) -> str:
+    """
+    查询当前条件单 (止盈止损等 Algo Orders)
+
+    返回字段:
+    - algoId: 条件单ID
+    - symbol: 交易对
+    - side: 方向
+    - orderType: 订单类型 (STOP_MARKET, TAKE_PROFIT_MARKET 等)
+    - quantity: 数量
+    - triggerPrice: 触发价格
+    - algoStatus: 状态
+    """
+    try:
+        client = _get_client()
+        import time
+
+        algo_url = "/fapi/v1/openAlgoOrders"
+        query_params: dict[str, Any] = {
+            "timestamp": int(time.time() * 1000),
+        }
+        if params.symbol:
+            query_params["symbol"] = params.symbol.upper()
+
+        result = client.sign_request("GET", algo_url, query_params)
+
+        if not result:
+            return json.dumps({"message": "当前无条件单"}, ensure_ascii=False)
+
+        # 只保留关键字段
+        filtered = [
+            {
+                "algoId": item.get("algoId"),
+                "symbol": item.get("symbol"),
+                "side": item.get("side"),
+                "positionSide": item.get("positionSide"),
+                "orderType": item.get("orderType"),
+                "quantity": item.get("quantity"),
+                "triggerPrice": item.get("triggerPrice"),
+                "algoStatus": item.get("algoStatus"),
+                "workingType": item.get("workingType"),
+                "reduceOnly": item.get("reduceOnly"),
+                "createTime": item.get("createTime"),
             }
             for item in result
         ]

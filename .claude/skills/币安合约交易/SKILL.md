@@ -50,7 +50,10 @@ BINANCE_USE_TESTNET=false
 |----------|------|------|
 | `binance_get_balance` | 查询账户余额 | `asset` (可选) |
 | `binance_get_positions` | 查询持仓信息 | `symbol` (可选) |
-| `binance_get_open_orders` | 查询当前挂单 | `symbol` (可选) |
+| `binance_get_open_orders` | 查询普通挂单 (限价单等) | `symbol` (可选) |
+| `binance_get_open_algo_orders` | 查询条件单 (止盈止损) | `symbol` (可选) |
+
+> **注意**: 止盈止损订单使用 Algo Order API, 需要用 `binance_get_open_algo_orders` 查询, 不会出现在 `binance_get_open_orders` 中.
 
 ### 设置类
 
@@ -159,8 +162,11 @@ binance_set_stop_loss_take_profit(
 ### 6. 订单管理
 
 ```python
-# 查询当前挂单
+# 查询普通挂单 (限价单等)
 binance_get_open_orders(symbol="BTCUSDT")
+
+# 查询条件单 (止盈止损订单)
+binance_get_open_algo_orders(symbol="BTCUSDT")
 
 # 撤销指定订单
 binance_cancel_order(symbol="BTCUSDT", orderId=123456789)
@@ -168,6 +174,8 @@ binance_cancel_order(symbol="BTCUSDT", orderId=123456789)
 # 撤销所有挂单
 binance_cancel_all_orders(symbol="BTCUSDT")
 ```
+
+> **重要**: 止盈止损订单使用 Algo Order API (2025-12-09 迁移后), 必须使用 `binance_get_open_algo_orders` 查询, 普通的 `binance_get_open_orders` 不会返回这些订单.
 
 ---
 
