@@ -69,8 +69,10 @@ BINANCE_USE_TESTNET=false
 | `binance_place_order` | 下单 | `symbol`, `side`, `type`, `quantity` |
 | `binance_close_position` | 平仓 | `symbol`, `quantity` (可选) |
 | `binance_set_stop_loss_take_profit` | 设置止损止盈 | `symbol`, `stopLossPrice`, `takeProfitPrice` |
-| `binance_cancel_order` | 撤销订单 | `symbol`, `orderId` |
-| `binance_cancel_all_orders` | 撤销所有订单 | `symbol` |
+| `binance_cancel_order` | 撤销普通订单 | `symbol`, `orderId` |
+| `binance_cancel_all_orders` | 撤销所有普通订单 | `symbol` |
+| `binance_cancel_algo_order` | 撤销单个条件单 | `symbol`, `algoId` |
+| `binance_cancel_all_algo_orders` | 撤销所有条件单 | `symbol` |
 
 ---
 
@@ -171,11 +173,21 @@ binance_get_open_algo_orders(symbol="BTCUSDT")
 # 撤销指定订单
 binance_cancel_order(symbol="BTCUSDT", orderId=123456789)
 
-# 撤销所有挂单
+# 撤销所有普通挂单
 binance_cancel_all_orders(symbol="BTCUSDT")
+
+# 撤销单个条件单 (止盈止损)
+binance_cancel_algo_order(symbol="BTCUSDT", algoId=123456789)
+
+# 撤销所有条件单 (止盈止损)
+binance_cancel_all_algo_orders(symbol="BTCUSDT")
 ```
 
-> **重要**: 止盈止损订单使用 Algo Order API (2025-12-09 迁移后), 必须使用 `binance_get_open_algo_orders` 查询, 普通的 `binance_get_open_orders` 不会返回这些订单.
+> **重要**:
+> - 止盈止损订单使用 Algo Order API (2025-12-09 迁移后)
+> - 查询条件单: `binance_get_open_algo_orders`
+> - 撤销条件单: `binance_cancel_algo_order` 或 `binance_cancel_all_algo_orders`
+> - 普通的 `binance_cancel_all_orders` **无法撤销条件单**
 
 ---
 
@@ -259,10 +271,34 @@ binance_place_order(
 
 本 MCP 工具使用 [binance-futures-connector-python](https://github.com/binance/binance-futures-connector-python) 官方 SDK, 无需手动处理签名等底层细节.
 
+### API 端点说明
+
+**普通订单 API**:
+- `GET /fapi/v1/openOrders` - 查询普通挂单
+- `DELETE /fapi/v1/order` - 撤销单个普通订单
+- `DELETE /fapi/v1/allOpenOrders` - 撤销所有普通订单
+
+**条件单 Algo Order API** (2025-12-09 迁移后):
+- `POST /fapi/v1/algoOrder` - 创建条件单 (止盈止损)
+- `GET /fapi/v1/openAlgoOrders` - 查询条件单
+- `DELETE /fapi/v1/algoOrder` - 撤销单个条件单
+- **注意**: 币安没有提供批量撤销条件单的 API, `binance_cancel_all_algo_orders` 工具通过先查询再逐个撤销实现
+
+### 开发注意事项
+
+修改本 MCP 服务前, 应使用 Context7 查询最新 API 文档:
+
+```
+# 查询币安合约 API 文档
+resolve-library-id: "binance futures connector python"
+get-library-docs: context7CompatibleLibraryID="/binance/binance-futures-connector-python", topic="具体功能"
+```
+
 ---
 
 ## 参考资料
 
-- [币安 USDT-M 合约 API 文档](https://binance-docs.github.io/apidocs/futures/cn/)
+- [币安 USDT-M 合约 API 文档](https://developers.binance.com/docs/zh-CN/derivatives/usds-margined-futures/general-info)
 - [binance-futures-connector-python](https://github.com/binance/binance-futures-connector-python)
+- Context7 Library ID: `/binance/binance-futures-connector-python`
 

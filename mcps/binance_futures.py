@@ -294,6 +294,36 @@ class GetOpenAlgoOrdersInput(BaseModel):
     )
 
 
+class CancelAlgoOrderInput(BaseModel):
+    """撤销条件单输入"""
+
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT")
+    algo_id: Optional[int] = Field(default=None, description="条件单ID", alias="algoId")
+    client_algo_id: Optional[str] = Field(
+        default=None, description="客户端条件单ID", alias="clientAlgoId"
+    )
+
+    @field_validator("symbol")
+    @classmethod
+    def validate_symbol(cls, v: str) -> str:
+        return v.upper().strip()
+
+
+class CancelAllAlgoOrdersInput(BaseModel):
+    """撤销所有条件单输入"""
+
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT")
+
+    @field_validator("symbol")
+    @classmethod
+    def validate_symbol(cls, v: str) -> str:
+        return v.upper().strip()
+
+
 # ============ 客户端工具函数 ============
 
 
@@ -1029,6 +1059,126 @@ def binance_get_open_algo_orders(
         ]
 
         return json.dumps(filtered, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return _handle_error(e)
+
+
+@mcp.tool(
+    name="binance_cancel_algo_order",
+    annotations={
+        "title": "撤销条件单",
+        "readOnlyHint": False,
+        "destructiveHint": True,
+        "idempotentHint": False,
+        "openWorldHint": True,
+    },
+)
+def binance_cancel_algo_order(params: CancelAlgoOrderInput) -> str:
+    """
+    撤销指定条件单 (止盈止损等 Algo Order)
+
+    参数:
+    - symbol: 交易对
+    - algoId: 条件单ID (二选一)
+    - clientAlgoId: 客户端条件单ID (二选一)
+
+    返回字段:
+    - algoId: 条件单ID
+    - algoStatus: 状态 (CANCELED)
+    - symbol: 交易对
+    - orderType: 订单类型
+    """
+    if params.algo_id is None and params.client_algo_id is None:
+        return "Error: 必须指定 algoId 或 clientAlgoId"
+
+    try:
+        client = _get_client()
+        import time
+
+        algo_url = "/fapi/v1/algoOrder"
+        cancel_params: dict[str, Any] = {
+            "symbol": params.symbol,
+            "timestamp": int(time.time() * 1000),
+        }
+        if params.algo_id:
+            cancel_params["algoId"] = params.algo_id
+        if params.client_algo_id:
+            cancel_params["clientAlgoId"] = params.client_algo_id
+
+        result = client.sign_request("DELETE", algo_url, cancel_params)
+        return json.dumps(result, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return _handle_error(e)
+
+
+@mcp.tool(
+    name="binance_cancel_all_algo_orders",
+    annotations={
+        "title": "撤销所有条件单",
+        "readOnlyHint": False,
+        "destructiveHint": True,
+        "idempotentHint": False,
+        "openWorldHint": True,
+    },
+)
+def binance_cancel_all_algo_orders(params: CancelAllAlgoOrdersInput) -> str:
+    """
+    撤销指定交易对的所有条件单 (止盈止损等 Algo Orders)
+
+    参数:
+    - symbol: 交易对
+
+    返回字段:
+    - code: 状态码 (200 表示成功)
+    - msg: 状态信息
+    """
+    try:
+        client = _get_client()
+        import time
+
+        # 币安没有批量撤销 Algo Order 的 API, 需要先查询再逐个撤销
+        # Step 1: 查询所有条件单
+        query_url = "/fapi/v1/openAlgoOrders"
+        query_params: dict[str, Any] = {
+            "symbol": params.symbol,
+            "timestamp": int(time.time() * 1000),
+        }
+        algo_orders = client.sign_request("GET", query_url, query_params)
+
+        if not algo_orders:
+            return json.dumps(
+                {"code": 200, "msg": f"当前 {params.symbol} 无条件单"},
+                ensure_ascii=False,
+            )
+
+        # Step 2: 逐个撤销
+        cancel_url = "/fapi/v1/algoOrder"
+        results = []
+        for order in algo_orders:
+            algo_id = order.get("algoId")
+            if algo_id:
+                cancel_params: dict[str, Any] = {
+                    "symbol": params.symbol,
+                    "algoId": algo_id,
+                    "timestamp": int(time.time() * 1000),
+                }
+                try:
+                    cancel_result = client.sign_request(
+                        "DELETE", cancel_url, cancel_params
+                    )
+                    results.append({"algoId": algo_id, "status": "CANCELED"})
+                except Exception as e:
+                    results.append({"algoId": algo_id, "error": str(e)})
+
+        return json.dumps(
+            {
+                "code": 200,
+                "msg": f"已撤销 {len(results)} 条条件单",
+                "details": results,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
     except Exception as e:
         return _handle_error(e)
 
