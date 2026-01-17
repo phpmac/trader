@@ -1,6 +1,24 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/claude-code) when working with code in this repository.
+## 全剧规则
+
+- 不要使用emoji表情符号
+- 默认使用中国上海时间/本地时间
+- 总是使用中文回答,注释使用中文,标点符号使用英文,console使用中文
+- 明确要求的情况下要编写单元测试确保代码正常运行/没有缺陷或漏洞
+- 任务完成需要再次复核验证一次,避免遗漏
+
+---
+
+## 交易教训
+
+
+历史交易失误案例存放在 `.claude/skills/交易教训/` 目录, **开仓前必须检查**。
+交易出现亏损需要复盘总结经验。
+
+详见: `.claude/skills/交易教训/SKILL.md`
+
+---
 
 ## 交易员核心概念
 
