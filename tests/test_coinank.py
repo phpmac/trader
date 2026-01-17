@@ -4,6 +4,7 @@ coinank MCP 集成测试
 
 运行命令:
     uv run pytest tests/test_coinank.py -v -s
+    uv run pytest tests/test_coinank.py::test_get_rsi_map -v -s
 
 注意: 需要设置环境变量 COINANK_API_KEY
 """
