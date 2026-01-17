@@ -23,16 +23,6 @@ load_dotenv(_project_root / ".env")
 mcp = FastMCP[Any]("slack-notify")
 
 
-class SendMessageInput(BaseModel):
-    """发送消息输入"""
-
-    text: str = Field(description="消息内容")
-    username: str | None = Field(default=None, description="发送者名称 (可选)")
-    icon_emoji: str | None = Field(
-        default=None, description="发送者图标 emoji (可选, 如 :robot_face:)"
-    )
-
-
 class SendMessageResult(BaseModel):
     """发送消息结果"""
 
@@ -49,29 +39,32 @@ def get_webhook_url() -> str:
 
 
 @mcp.tool(name="slack_send_message")
-def slack_send_message(params: SendMessageInput) -> SendMessageResult:
+def slack_send_message(
+    text: str,
+    username: str | None = None,
+    icon_emoji: str | None = None,
+) -> SendMessageResult:
     """
     发送消息到 Slack 频道
 
-    参数:
-    - text: 消息内容 (支持 Slack 格式化语法)
-    - username: 发送者名称 (可选)
-    - icon_emoji: 发送者图标 (可选, 如 :robot_face:)
+    Args:
+        text: 消息内容 (支持 Slack 格式化语法)
+        username: 发送者名称 (可选)
+        icon_emoji: 发送者图标 (可选, 如 :robot_face:)
 
-    返回:
-    - success: 是否成功
-    - message: 结果说明
+    Returns:
+        SendMessageResult: success 是否成功, message 结果说明
     """
     webhook_url = get_webhook_url()
 
     # 构建 payload
-    payload: dict[str, Any] = {"text": params.text}
+    payload: dict[str, Any] = {"text": text}
 
-    if params.username:
-        payload["username"] = params.username
+    if username:
+        payload["username"] = username
 
-    if params.icon_emoji:
-        payload["icon_emoji"] = params.icon_emoji
+    if icon_emoji:
+        payload["icon_emoji"] = icon_emoji
 
     # 发送请求
     with httpx.Client(timeout=10) as client:
