@@ -438,6 +438,37 @@ def binance_get_balance(params: GetBalanceInput = GetBalanceInput()) -> str:
         return _handle_error(e)
 
 
+def _parse_params(params: Any, model_class: type) -> Any:
+    """
+    解析参数, 兼容多种输入格式
+
+    - None / 空字符串 / "{}" -> 返回 model_class 默认实例
+    - dict -> 转换为 model_class 实例
+    - model_class 实例 -> 直接返回
+    - JSON 字符串 -> 解析后转换为 model_class 实例
+    """
+    if params is None:
+        return model_class()
+
+    if isinstance(params, str):
+        params = params.strip()
+        if not params or params == "{}":
+            return model_class()
+        # 尝试解析 JSON 字符串
+        try:
+            params = json.loads(params)
+        except json.JSONDecodeError:
+            raise ValueError(f"无法解析参数: {params}")
+
+    if isinstance(params, dict):
+        return model_class(**params) if params else model_class()
+
+    if isinstance(params, model_class):
+        return params
+
+    raise ValueError(f"不支持的参数类型: {type(params)}")
+
+
 @mcp.tool(
     name="binance_get_positions",
     annotations={
@@ -448,7 +479,7 @@ def binance_get_balance(params: GetBalanceInput = GetBalanceInput()) -> str:
         "openWorldHint": True,
     },
 )
-def binance_get_positions(params: GetPositionsInput = GetPositionsInput()) -> str:
+def binance_get_positions(params: Any = None) -> str:
     """
     查询币安 USDT 合约持仓信息
 
@@ -466,8 +497,12 @@ def binance_get_positions(params: GetPositionsInput = GetPositionsInput()) -> st
     try:
         client = _get_client()
 
-        if params.symbol:
-            result = client.get_position_risk(symbol=params.symbol.upper())
+        # 解析参数
+        parsed = _parse_params(params, GetPositionsInput)
+        symbol = parsed.symbol
+
+        if symbol:
+            result = client.get_position_risk(symbol=symbol)
         else:
             result = client.get_position_risk()
 
