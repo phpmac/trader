@@ -1,13 +1,13 @@
 ---
 name: mcp-tools
-description: 使用 FastMCP 框架开发交易相关的 MCP 工具, 包括交易所 API 集成(币安/OKX等)、行情数据获取、订单管理等。当需要创建 MCP 服务器或交易工具时触发此技能。
+description: 使用 FastMCP 框架开发交易相关的 MCP 工具, 包括交易所 API 集成(币安/OKX等)、行情数据获取、订单管理等.当需要创建 MCP 服务器或交易工具时触发此技能.
 ---
 
 # FastMCP 交易工具开发指南
 
 ## 概述
 
-本技能指导使用 [FastMCP](https://github.com/jlowin/fastmcp) 框架开发交易相关的 MCP (Model Context Protocol) 工具。
+本技能指导使用 [FastMCP](https://github.com/jlowin/fastmcp) 框架开发交易相关的 MCP (Model Context Protocol) 工具.
 
 - **官方文档**: https://gofastmcp.com
 - **GitHub**: https://github.com/jlowin/fastmcp
@@ -67,7 +67,7 @@ trading_mcp/
 
 ## 环境变量加载 (重要)
 
-MCP 服务器必须在启动时主动加载 `.env` 文件, 因为 MCP 进程不会自动继承 shell 环境变量。
+MCP 服务器必须在启动时主动加载 `.env` 文件, 因为 MCP 进程不会自动继承 shell 环境变量.
 
 ```python
 from pathlib import Path

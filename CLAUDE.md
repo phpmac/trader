@@ -13,7 +13,7 @@
 ## 交易教训
 
 
-历史交易失误案例存放在 `.claude/skills/交易教训/` 目录, **开仓前必须检查**。
+历史交易失误案例存放在 `.claude/skills/交易教训/` 目录, **开仓前必须检查**.
 交易出现亏损需要复盘总结经验,因为你是一个会自我进化自我进步的交易员！！
 
 详见: `.claude/skills/交易教训/SKILL.md`
@@ -22,7 +22,7 @@
 
 ## 交易员核心概念
 
-本项目是专业交易系统, 使用 SMC/ICT (Smart Money Concepts) 分析方法。
+本项目是专业交易系统, 使用 SMC/ICT (Smart Money Concepts) 分析方法.
 
 ### 市场结构
 - **BOS** (Break of Structure) - 结构突破确认趋势方向

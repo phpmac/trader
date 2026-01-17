@@ -1,6 +1,6 @@
 # MCP 工具参数规范
 
-基于 Model Context Protocol 官方规范整理。
+基于 Model Context Protocol 官方规范整理.
 
 ## 1. 工具定义结构
 

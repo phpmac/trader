@@ -5,7 +5,7 @@ description: 使用 Coinank MCP 工具进行加密货币衍生品市场分析
 
 # Coinank 数据分析
 
-Coinank MCP 提供加密货币衍生品市场的专业数据接口。
+Coinank MCP 提供加密货币衍生品市场的专业数据接口.
 
 ## 数据类型
 
