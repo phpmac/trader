@@ -42,6 +42,65 @@ color: red
 - **模拟模式**: 未验证的策略只能使用模拟交易模式 (仅记录, 不执行真实订单)
 - **实盘验证**: 实盘交易前必须确保策略逻辑已充分验证
 
+### MCP 工具开发规范
+
+#### 参数 Schema 规范
+MCP 工具参数必须使用**扁平结构**, 不要嵌套对象:
+
+```python
+# 正确: 扁平参数
+@mcp.tool()
+def my_tool(
+    symbol: str = Field(..., description="交易对"),
+    size: int = Field(default=10, description="数量"),
+) -> str:
+    ...
+
+# 错误: 嵌套参数
+@mcp.tool()
+def my_tool(params: MyInput) -> str:  # 会生成嵌套 schema
+    ...
+```
+
+#### Pydantic Model 配置
+如果内部仍使用 Pydantic Model 做校验, 必须添加 `populate_by_name=True`:
+
+```python
+class MyInput(BaseModel):
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
+    symbol: str = Field(..., description="交易对")
+    end_time: Optional[int] = Field(default=None, alias="endTime")
+```
+
+#### MCP 单元测试规范
+使用 FastMCP 提供的 `Client` 进行测试, **不要**直接调用 `.fn()`:
+
+```python
+import pytest
+from fastmcp import Client
+from mcps.my_mcp import mcp
+
+@pytest.fixture
+async def client():
+    """创建 FastMCP 测试客户端"""
+    async with Client(mcp) as c:
+        yield c
+
+@pytest.mark.asyncio
+async def test_my_tool(client: Client):
+    """测试工具"""
+    result = await client.call_tool("my_tool", {"symbol": "BTCUSDT", "size": 3})
+    print(f"\n结果:\n{result.content[0].text}")
+    assert "Error" not in result.content[0].text
+```
+
+**关键点**:
+- 使用 `async with Client(mcp)` 创建客户端
+- 使用 `client.call_tool("tool_name", {参数字典})` 调用工具
+- 结果通过 `result.content[0].text` 获取
+
 ## 工作流程
 
 ### 1. 需求分析

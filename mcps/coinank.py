@@ -144,7 +144,9 @@ class OrderSide(str, Enum):
 class GetLastPriceInput(BaseModel):
     """获取最新价格输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所")
@@ -156,7 +158,9 @@ class GetLastPriceInput(BaseModel):
 class GetOpenInterestKlineInput(BaseModel):
     """获取持仓量K线输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所")
     symbol: str = Field(..., description="交易对")
@@ -170,7 +174,9 @@ class GetOpenInterestKlineInput(BaseModel):
 class GetCVDKlineInput(BaseModel):
     """获取CVD K线输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所")
     symbol: str = Field(..., description="交易对")
@@ -187,7 +193,9 @@ class GetCVDKlineInput(BaseModel):
 class GetAggregatedCVDInput(BaseModel):
     """获取聚合CVD输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     base_coin: str = Field(..., description="币种, 如 BTC", alias="baseCoin")
     interval: Interval = Field(default=Interval.MINUTE_15, description="时间周期")
@@ -203,7 +211,9 @@ class GetAggregatedCVDInput(BaseModel):
 class GetRealTimeFundFlowInput(BaseModel):
     """获取实时资金流入流出输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     product_type: ProductType = Field(
         default=ProductType.SWAP, description="产品类型", alias="productType"
@@ -224,7 +234,9 @@ class GetRealTimeFundFlowInput(BaseModel):
 class GetFundingRateKlineInput(BaseModel):
     """获取资金费率K线输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所")
     symbol: Optional[str] = Field(default=None, description="交易对")
@@ -238,7 +250,9 @@ class GetFundingRateKlineInput(BaseModel):
 class GetLongShortPersonRatioInput(BaseModel):
     """获取多空持仓人数比输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所")
     symbol: Optional[str] = Field(default=None, description="交易对")
@@ -252,7 +266,9 @@ class GetLongShortPersonRatioInput(BaseModel):
 class GetRSIMapInput(BaseModel):
     """获取RSI选币器输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     interval: RSIInterval = Field(default=RSIInterval.HOUR_1, description="时间周期")
     exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所")
@@ -263,7 +279,9 @@ class GetRSIMapInput(BaseModel):
 class GetLargeMarketOrdersInput(BaseModel):
     """获取大额市价订单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对")
     product_type: ProductType = Field(
@@ -279,7 +297,9 @@ class GetLargeMarketOrdersInput(BaseModel):
 class GetLargeLimitOrdersInput(BaseModel):
     """获取大额限价订单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对")
     exchange_type: ExchangeType = Field(
@@ -300,7 +320,9 @@ class GetLargeLimitOrdersInput(BaseModel):
 class GetOpenInterestRankInput(BaseModel):
     """获取持仓排行榜输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     page: int = Field(default=1, description="页码")
     size: int = Field(default=50, description="每页大小")
@@ -313,7 +335,9 @@ class GetOpenInterestRankInput(BaseModel):
 class GetVolumeRankInput(BaseModel):
     """获取交易量变化排行榜输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     sort_by: Optional[str] = Field(default=None, description="排序字段", alias="sortBy")
     sort_type: SortType = Field(
@@ -326,7 +350,9 @@ class GetVolumeRankInput(BaseModel):
 class GetPriceRankInput(BaseModel):
     """获取价格变化排行榜输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     sort_by: PriceRankSortBy = Field(
         default=PriceRankSortBy.PRICE_CHANGE_H24,
@@ -348,7 +374,9 @@ class GetPriceRankInput(BaseModel):
 class GetKlinesInput(BaseModel):
     """获取K线数据输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: Optional[str] = Field(default=None, description="交易对")
     exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所")
@@ -484,7 +512,13 @@ def filter_rsi_map(
         "openWorldHint": True,
     },
 )
-async def coinank_get_last_price(params: GetLastPriceInput) -> str:
+async def coinank_get_last_price(
+    symbol: Optional[str] = Field(default=None, description="交易对, 如 BTCUSDT"),
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    product_type: ProductType = Field(
+        default=ProductType.SWAP, description="产品类型", alias="productType"
+    ),
+) -> str:
     """
     获取指定加密货币交易对的最新价格信息
 
@@ -497,13 +531,15 @@ async def coinank_get_last_price(params: GetLastPriceInput) -> str:
     - fundingRate: 资金费率
     - markPrice: 标记价格
     """
+    if symbol is None:
+        raise ValueError("symbol 必须提供")
     try:
         result = await _coinank_request(
             "/instruments/getLastPrice",
             {
-                "symbol": params.symbol,
-                "exchange": params.exchange.value,
-                "productType": params.product_type.value,
+                "symbol": symbol,
+                "exchange": exchange.value,
+                "productType": product_type.value,
             },
         )
         # 移除 open24h 字段
@@ -525,7 +561,13 @@ async def coinank_get_last_price(params: GetLastPriceInput) -> str:
     },
 )
 async def coinank_get_open_interest_kline(
-    params: GetOpenInterestKlineInput,
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    symbol: Optional[str] = Field(default=None, description="交易对"),
+    interval: Interval = Field(default=Interval.MINUTE_15, description="时间周期"),
+    end_time: Optional[int] = Field(
+        default=None, description="结束时间(时间戳毫秒)", alias="endTime"
+    ),
+    size: int = Field(default=1, description="返回数据数量"),
 ) -> str:
     """
     获取交易对持仓量K线数据
@@ -537,15 +579,17 @@ async def coinank_get_open_interest_kline(
     - low: 最低持仓量
     - high: 最高持仓量
     """
+    if symbol is None:
+        raise ValueError("symbol 必须提供")
     try:
         result = await _coinank_request(
             "/openInterest/kline",
             {
-                "exchange": params.exchange.value,
-                "symbol": params.symbol,
-                "interval": params.interval.value,
-                "endTime": params.end_time or _get_current_timestamp_ms(),
-                "size": params.size,
+                "exchange": exchange.value,
+                "symbol": symbol,
+                "interval": interval.value,
+                "endTime": end_time or _get_current_timestamp_ms(),
+                "size": size,
             },
         )
         # 只保留关键字段
@@ -574,7 +618,18 @@ async def coinank_get_open_interest_kline(
         "openWorldHint": True,
     },
 )
-async def coinank_get_cvd_kline(params: GetCVDKlineInput) -> str:
+async def coinank_get_cvd_kline(
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    symbol: Optional[str] = Field(default=None, description="交易对"),
+    interval: Interval = Field(default=Interval.MINUTE_15, description="时间周期"),
+    end_time: Optional[int] = Field(
+        default=None, description="结束时间(时间戳毫秒)", alias="endTime"
+    ),
+    size: int = Field(default=1, description="返回数据数量"),
+    product_type: ProductType = Field(
+        default=ProductType.SWAP, description="产品类型", alias="productType"
+    ),
+) -> str:
     """
     获取CVD (Cumulative Volume Delta) K线数据
 
@@ -584,16 +639,18 @@ async def coinank_get_cvd_kline(params: GetCVDKlineInput) -> str:
 
     返回数组格式: [timestamp, buyVolume, sellVolume, netVolume]
     """
+    if symbol is None:
+        raise ValueError("symbol 必须提供")
     try:
         result = await _coinank_request(
             "/marketOrder/getCvd",
             {
-                "exchange": params.exchange.value,
-                "symbol": params.symbol,
-                "interval": params.interval.value,
-                "endTime": params.end_time or _get_current_timestamp_ms(),
-                "size": params.size,
-                "productType": params.product_type.value,
+                "exchange": exchange.value,
+                "symbol": symbol,
+                "interval": interval.value,
+                "endTime": end_time or _get_current_timestamp_ms(),
+                "size": size,
+                "productType": product_type.value,
             },
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -611,21 +668,35 @@ async def coinank_get_cvd_kline(params: GetCVDKlineInput) -> str:
         "openWorldHint": True,
     },
 )
-async def coinank_get_aggregated_cvd(params: GetAggregatedCVDInput) -> str:
+async def coinank_get_aggregated_cvd(
+    base_coin: Optional[str] = Field(
+        default=None, description="币种, 如 BTC", alias="baseCoin"
+    ),
+    interval: Interval = Field(default=Interval.MINUTE_15, description="时间周期"),
+    end_time: Optional[int] = Field(
+        default=None, description="结束时间(时间戳毫秒)", alias="endTime"
+    ),
+    size: int = Field(default=1, description="返回数据数量"),
+    product_type: ProductType = Field(
+        default=ProductType.SWAP, description="产品类型", alias="productType"
+    ),
+) -> str:
     """
     获取指定币种的聚合CVD数据 (跨交易所汇总)
 
     返回数组格式: [timestamp, buyVolume, sellVolume, netVolume]
     """
+    if base_coin is None:
+        raise ValueError("baseCoin 必须提供")
     try:
         result = await _coinank_request(
             "/marketOrder/getAggCvd",
             {
-                "baseCoin": params.base_coin,
-                "interval": params.interval.value,
-                "endTime": params.end_time or _get_current_timestamp_ms(),
-                "size": params.size,
-                "productType": params.product_type.value,
+                "baseCoin": base_coin,
+                "interval": interval.value,
+                "endTime": end_time or _get_current_timestamp_ms(),
+                "size": size,
+                "productType": product_type.value,
                 "exchanges": "",  # API要求必须传空字符串
             },
         )
@@ -645,7 +716,20 @@ async def coinank_get_aggregated_cvd(params: GetAggregatedCVDInput) -> str:
     },
 )
 async def coinank_get_realtime_fund_flow(
-    params: GetRealTimeFundFlowInput,
+    product_type: ProductType = Field(
+        default=ProductType.SWAP, description="产品类型", alias="productType"
+    ),
+    base_coin: Optional[str] = Field(
+        default=None, description="加密货币", alias="baseCoin"
+    ),
+    page: int = Field(default=1, description="当前页"),
+    size: int = Field(default=10, description="每页大小"),
+    sort_by: FundSortBy = Field(
+        default=FundSortBy.H1, description="排序字段", alias="sortBy"
+    ),
+    sort_type: SortType = Field(
+        default=SortType.DESC, description="排序类型", alias="sortType"
+    ),
 ) -> str:
     """
     获取实时资金流入流出数据
@@ -658,12 +742,12 @@ async def coinank_get_realtime_fund_flow(
         result = await _coinank_request(
             "/fund/fundReal",
             {
-                "productType": params.product_type.value,
-                "baseCoin": params.base_coin,
-                "page": params.page,
-                "size": params.size,
-                "sortBy": params.sort_by.value,
-                "sortType": params.sort_type.value,
+                "productType": product_type.value,
+                "baseCoin": base_coin,
+                "page": page,
+                "size": size,
+                "sortBy": sort_by.value,
+                "sortType": sort_type.value,
             },
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -682,7 +766,13 @@ async def coinank_get_realtime_fund_flow(
     },
 )
 async def coinank_get_funding_rate_kline(
-    params: GetFundingRateKlineInput,
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    symbol: Optional[str] = Field(default=None, description="交易对"),
+    interval: Interval = Field(default=Interval.MINUTE_15, description="时间周期"),
+    end_time: Optional[int] = Field(
+        default=None, description="结束时间(时间戳毫秒)", alias="endTime"
+    ),
+    size: int = Field(default=1, description="返回数据数量"),
 ) -> str:
     """
     获取交易对资金费率K线数据
@@ -695,11 +785,11 @@ async def coinank_get_funding_rate_kline(
         result = await _coinank_request(
             "/fundingRate/kline",
             {
-                "exchange": params.exchange.value,
-                "symbol": params.symbol,
-                "interval": params.interval.value,
-                "endTime": params.end_time or _get_current_timestamp_ms(),
-                "size": params.size,
+                "exchange": exchange.value,
+                "symbol": symbol,
+                "interval": interval.value,
+                "endTime": end_time or _get_current_timestamp_ms(),
+                "size": size,
             },
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -718,7 +808,13 @@ async def coinank_get_funding_rate_kline(
     },
 )
 async def coinank_get_long_short_ratio(
-    params: GetLongShortPersonRatioInput,
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    symbol: Optional[str] = Field(default=None, description="交易对"),
+    interval: Interval = Field(default=Interval.MINUTE_15, description="时间周期"),
+    end_time: Optional[int] = Field(
+        default=None, description="结束时间(时间戳毫秒)", alias="endTime"
+    ),
+    size: int = Field(default=1, description="返回数据数量"),
 ) -> str:
     """
     获取多空持仓人数比数据 (支持 Binance, OKX, Bybit)
@@ -731,11 +827,11 @@ async def coinank_get_long_short_ratio(
         result = await _coinank_request(
             "/longshort/person",
             {
-                "exchange": params.exchange.value,
-                "symbol": params.symbol,
-                "interval": params.interval.value,
-                "endTime": params.end_time or _get_current_timestamp_ms(),
-                "size": params.size,
+                "exchange": exchange.value,
+                "symbol": symbol,
+                "interval": interval.value,
+                "endTime": end_time or _get_current_timestamp_ms(),
+                "size": size,
             },
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -753,7 +849,12 @@ async def coinank_get_long_short_ratio(
         "openWorldHint": True,
     },
 )
-async def coinank_get_rsi_map(params: GetRSIMapInput) -> str:
+async def coinank_get_rsi_map(
+    interval: RSIInterval = Field(default=RSIInterval.HOUR_1, description="时间周期"),
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    lowest: int = Field(default=5, description="筛选最低RSI数量"),
+    highest: int = Field(default=5, description="筛选最高RSI数量"),
+) -> str:
     """
     RSI选币器 - 筛选RSI最高和最低的币种
 
@@ -769,11 +870,11 @@ async def coinank_get_rsi_map(params: GetRSIMapInput) -> str:
         result = await _coinank_request(
             "/rsiMap/list",
             {
-                "interval": params.interval.value,
-                "exchange": params.exchange.value,
+                "interval": interval.value,
+                "exchange": exchange.value,
             },
         )
-        filtered = filter_rsi_map(result["rsiMap"], params.lowest, params.highest)
+        filtered = filter_rsi_map(result["rsiMap"], lowest, highest)
         return json.dumps(filtered, indent=2, ensure_ascii=False)
     except Exception as e:
         return _handle_api_error(e)
@@ -790,7 +891,15 @@ async def coinank_get_rsi_map(params: GetRSIMapInput) -> str:
     },
 )
 async def coinank_get_large_market_orders(
-    params: GetLargeMarketOrdersInput,
+    symbol: Optional[str] = Field(default=None, description="交易对"),
+    product_type: ProductType = Field(
+        default=ProductType.SWAP, description="产品类型", alias="productType"
+    ),
+    amount: int = Field(default=100000, description="查询的最小金额"),
+    end_time: Optional[int] = Field(
+        default=None, description="结束时间(时间戳毫秒)", alias="endTime"
+    ),
+    size: int = Field(default=10, description="返回数据数量"),
 ) -> str:
     """
     获取大额市价订单数据
@@ -801,6 +910,15 @@ async def coinank_get_large_market_orders(
     - tradeTurnover: 成交金额
     - ts: 时间戳
     """
+    if symbol is None:
+        raise ValueError("symbol 必须提供")
+    params = GetLargeMarketOrdersInput(
+        symbol=symbol,
+        product_type=product_type,
+        amount=amount,
+        end_time=end_time,
+        size=size,
+    )
     try:
         result = await _coinank_request(
             "/trades/largeTrades",
@@ -838,30 +956,45 @@ async def coinank_get_large_market_orders(
     },
 )
 async def coinank_get_large_limit_orders(
-    params: GetLargeLimitOrdersInput,
+    symbol: Optional[str] = Field(default=None, description="交易对"),
+    exchange_type: ExchangeType = Field(
+        default=ExchangeType.SWAP, description="交易所类型", alias="exchangeType"
+    ),
+    amount: int = Field(default=100000, description="查询的最小金额"),
+    side: OrderSide = Field(default=OrderSide.BUY, description="订单方向"),
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    start_time: Optional[int] = Field(
+        default=None, description="开始时间(时间戳毫秒)", alias="startTime"
+    ),
+    size: int = Field(default=10, description="返回数据数量"),
+    is_history: bool = Field(
+        default=False, description="是否查询历史数据", alias="isHistory"
+    ),
 ) -> str:
     """
     获取大额限价订单数据
 
     返回订单薄中的大额挂单, 可用于分析支撑/阻力位
     """
+    if symbol is None:
+        raise ValueError("symbol 必须提供")
     try:
         # 默认开始时间为4小时前
-        start_time = params.start_time
-        if start_time is None:
-            start_time = _get_current_timestamp_ms() - 4 * 60 * 60 * 1000
+        actual_start_time = start_time
+        if actual_start_time is None:
+            actual_start_time = _get_current_timestamp_ms() - 4 * 60 * 60 * 1000
 
         result = await _coinank_request(
             "/bigOrder/queryOrderList",
             {
-                "symbol": params.symbol,
-                "exchangeType": params.exchange_type.value,
-                "amount": params.amount,
-                "side": params.side.value,
-                "exchange": params.exchange.value,
-                "startTime": start_time,
-                "size": params.size,
-                "isHistory": str(params.is_history).lower(),
+                "symbol": symbol,
+                "exchangeType": exchange_type.value,
+                "amount": amount,
+                "side": side.value,
+                "exchange": exchange.value,
+                "startTime": actual_start_time,
+                "size": size,
+                "isHistory": str(is_history).lower(),
             },
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -880,7 +1013,14 @@ async def coinank_get_large_limit_orders(
     },
 )
 async def coinank_get_open_interest_rank(
-    params: GetOpenInterestRankInput,
+    page: int = Field(default=1, description="页码"),
+    size: int = Field(default=50, description="每页大小"),
+    sort_by: str = Field(
+        default="openInterest", description="排序字段", alias="sortBy"
+    ),
+    sort_type: SortType = Field(
+        default=SortType.DESC, description="排序类型", alias="sortType"
+    ),
 ) -> str:
     """
     获取持仓量排行榜数据
@@ -894,10 +1034,10 @@ async def coinank_get_open_interest_rank(
         result = await _coinank_request(
             "/instruments/oiRank",
             {
-                "page": params.page,
-                "size": params.size,
-                "sortBy": params.sort_by,
-                "sortType": params.sort_type.value,
+                "page": page,
+                "size": size,
+                "sortBy": sort_by,
+                "sortType": sort_type.value,
             },
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -915,7 +1055,16 @@ async def coinank_get_open_interest_rank(
         "openWorldHint": True,
     },
 )
-async def coinank_get_volume_rank(params: GetVolumeRankInput) -> str:
+async def coinank_get_volume_rank(
+    sort_by: Optional[str] = Field(
+        default=None, description="排序字段", alias="sortBy"
+    ),
+    sort_type: SortType = Field(
+        default=SortType.DESC, description="排序类型", alias="sortType"
+    ),
+    size: int = Field(default=3, description="返回数据数量"),
+    page: int = Field(default=1, description="页码"),
+) -> str:
     """
     获取交易量变化排行榜
 
@@ -928,10 +1077,10 @@ async def coinank_get_volume_rank(params: GetVolumeRankInput) -> str:
         result = await _coinank_request(
             "/instruments/volumeRank",
             {
-                "sortBy": params.sort_by,
-                "sortType": params.sort_type.value,
-                "size": params.size,
-                "page": params.page,
+                "sortBy": sort_by,
+                "sortType": sort_type.value,
+                "size": size,
+                "page": page,
             },
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -949,7 +1098,23 @@ async def coinank_get_volume_rank(params: GetVolumeRankInput) -> str:
         "openWorldHint": True,
     },
 )
-async def coinank_get_price_rank(params: GetPriceRankInput) -> str:
+async def coinank_get_price_rank(
+    sort_by: PriceRankSortBy = Field(
+        default=PriceRankSortBy.PRICE_CHANGE_H24,
+        description="排序字段",
+        alias="sortBy",
+    ),
+    sort_type: SortType = Field(
+        default=SortType.DESC,
+        description="排序类型, desc为涨, asc为跌",
+        alias="sortType",
+    ),
+    size: int = Field(default=10, description="返回数据数量"),
+    page: int = Field(default=1, description="页码"),
+    only_binance: bool = Field(
+        default=True, description="是否只返回币安数据", alias="onlyBinance"
+    ),
+) -> str:
     """
     获取价格变化排行榜
 
@@ -963,14 +1128,14 @@ async def coinank_get_price_rank(params: GetPriceRankInput) -> str:
         result = await _coinank_request(
             "/instruments/priceRank",
             {
-                "sortBy": params.sort_by.value,
-                "sortType": params.sort_type.value,
-                "size": params.size,
-                "page": params.page,
+                "sortBy": sort_by.value,
+                "sortType": sort_type.value,
+                "size": size,
+                "page": page,
             },
         )
         # 只保留币安合约数据
-        if params.only_binance and "list" in result:
+        if only_binance and "list" in result:
             result["list"] = [
                 {**item, "coinImage": ""}
                 for item in result["list"]
@@ -991,7 +1156,18 @@ async def coinank_get_price_rank(params: GetPriceRankInput) -> str:
         "openWorldHint": True,
     },
 )
-async def coinank_get_klines(params: GetKlinesInput) -> str:
+async def coinank_get_klines(
+    symbol: Optional[str] = Field(default=None, description="交易对"),
+    exchange: Exchange = Field(default=Exchange.BINANCE, description="交易所"),
+    end_time: Optional[int] = Field(
+        default=None, description="结束时间(时间戳毫秒)", alias="endTime"
+    ),
+    size: int = Field(default=1, description="返回数据数量"),
+    interval: Interval = Field(default=Interval.MINUTE_15, description="K线时间间隔"),
+    product_type: ProductType = Field(
+        default=ProductType.SWAP, description="产品类型", alias="productType"
+    ),
+) -> str:
     """
     获取价格K线数据
 
@@ -1004,12 +1180,12 @@ async def coinank_get_klines(params: GetKlinesInput) -> str:
         result = await _coinank_request(
             "/kline/lists",
             {
-                "symbol": params.symbol,
-                "exchange": params.exchange.value,
-                "endTime": params.end_time or _get_current_timestamp_ms(),
-                "size": params.size,
-                "interval": params.interval.value,
-                "productType": params.product_type.value,
+                "symbol": symbol,
+                "exchange": exchange.value,
+                "endTime": end_time or _get_current_timestamp_ms(),
+                "size": size,
+                "interval": interval.value,
+                "productType": product_type.value,
             },
         )
         # 只保留前8个字段

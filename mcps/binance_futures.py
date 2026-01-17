@@ -95,7 +95,9 @@ class MarginType(str, Enum):
 class GetBalanceInput(BaseModel):
     """获取账户余额输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     asset: Optional[str] = Field(
         default=None, description="资产名称 (如 USDT), 不传则返回所有资产"
@@ -105,7 +107,9 @@ class GetBalanceInput(BaseModel):
 class GetPositionsInput(BaseModel):
     """获取持仓信息输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: Optional[str] = Field(
         default=None, description="交易对 (如 BTCUSDT), 不传则返回所有持仓"
@@ -115,7 +119,9 @@ class GetPositionsInput(BaseModel):
 class ChangeLeverageInput(BaseModel):
     """修改杠杆倍数输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     leverage: int = Field(..., description="杠杆倍数 (1-125)", ge=1, le=125)
@@ -129,7 +135,9 @@ class ChangeLeverageInput(BaseModel):
 class ChangeMarginTypeInput(BaseModel):
     """修改保证金模式输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     margin_type: MarginType = Field(
@@ -145,7 +153,9 @@ class ChangeMarginTypeInput(BaseModel):
 class PlaceOrderInput(BaseModel):
     """下单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     side: OrderSide = Field(
@@ -197,7 +207,9 @@ class PlaceOrderInput(BaseModel):
 class ClosePositionInput(BaseModel):
     """平仓输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     position_side: PositionSide = Field(
@@ -218,7 +230,9 @@ class ClosePositionInput(BaseModel):
 class SetStopLossTakeProfitInput(BaseModel):
     """设置止损止盈输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     position_side: PositionSide = Field(
@@ -247,7 +261,9 @@ class SetStopLossTakeProfitInput(BaseModel):
 class CancelOrderInput(BaseModel):
     """撤销订单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     order_id: Optional[int] = Field(default=None, description="订单ID", alias="orderId")
@@ -264,7 +280,9 @@ class CancelOrderInput(BaseModel):
 class CancelAllOrdersInput(BaseModel):
     """撤销所有订单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
 
@@ -277,7 +295,9 @@ class CancelAllOrdersInput(BaseModel):
 class GetOpenOrdersInput(BaseModel):
     """查询当前挂单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: Optional[str] = Field(
         default=None, description="交易对 (如 BTCUSDT), 不传则返回所有挂单"
@@ -287,7 +307,9 @@ class GetOpenOrdersInput(BaseModel):
 class GetOpenAlgoOrdersInput(BaseModel):
     """查询当前条件单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: Optional[str] = Field(
         default=None, description="交易对 (如 BTCUSDT), 不传则返回所有条件单"
@@ -297,7 +319,9 @@ class GetOpenAlgoOrdersInput(BaseModel):
 class CancelAlgoOrderInput(BaseModel):
     """撤销条件单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
     algo_id: Optional[int] = Field(default=None, description="条件单ID", alias="algoId")
@@ -314,7 +338,9 @@ class CancelAlgoOrderInput(BaseModel):
 class CancelAllAlgoOrdersInput(BaseModel):
     """撤销所有条件单输入"""
 
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(
+        str_strip_whitespace=True, extra="forbid", populate_by_name=True
+    )
 
     symbol: str = Field(..., description="交易对, 如 BTCUSDT")
 
@@ -394,7 +420,11 @@ def _handle_error(e: Exception) -> str:
         "openWorldHint": True,
     },
 )
-def binance_get_balance(params: GetBalanceInput = GetBalanceInput()) -> str:
+def binance_get_balance(
+    asset: Optional[str] = Field(
+        default=None, description="资产名称 (如 USDT), 不传则返回所有资产"
+    ),
+) -> str:
     """
     查询币安 USDT 合约账户余额
 
@@ -411,17 +441,17 @@ def binance_get_balance(params: GetBalanceInput = GetBalanceInput()) -> str:
         result = client.balance()
 
         # 过滤资产
-        if params.asset:
-            asset_upper = params.asset.upper()
+        if asset:
+            asset_upper = asset.upper()
             result = [item for item in result if item.get("asset") == asset_upper]
             if not result:
-                return f"Error: 未找到资产 {params.asset}"
+                return f"Error: 未找到资产 {asset}"
 
         # 只保留关键字段, 并过滤零余额
         filtered = []
         for item in result:
             wallet_balance = Decimal(item.get("balance", "0"))
-            if wallet_balance != 0 or params.asset:
+            if wallet_balance != 0 or asset:
                 filtered.append(
                     {
                         "asset": item.get("asset"),
@@ -438,37 +468,6 @@ def binance_get_balance(params: GetBalanceInput = GetBalanceInput()) -> str:
         return _handle_error(e)
 
 
-def _parse_params(params: Any, model_class: type) -> Any:
-    """
-    解析参数, 兼容多种输入格式
-
-    - None / 空字符串 / "{}" -> 返回 model_class 默认实例
-    - dict -> 转换为 model_class 实例
-    - model_class 实例 -> 直接返回
-    - JSON 字符串 -> 解析后转换为 model_class 实例
-    """
-    if params is None:
-        return model_class()
-
-    if isinstance(params, str):
-        params = params.strip()
-        if not params or params == "{}":
-            return model_class()
-        # 尝试解析 JSON 字符串
-        try:
-            params = json.loads(params)
-        except json.JSONDecodeError:
-            raise ValueError(f"无法解析参数: {params}")
-
-    if isinstance(params, dict):
-        return model_class(**params) if params else model_class()
-
-    if isinstance(params, model_class):
-        return params
-
-    raise ValueError(f"不支持的参数类型: {type(params)}")
-
-
 @mcp.tool(
     name="binance_get_positions",
     annotations={
@@ -479,7 +478,11 @@ def _parse_params(params: Any, model_class: type) -> Any:
         "openWorldHint": True,
     },
 )
-def binance_get_positions(params: Any = None) -> str:
+def binance_get_positions(
+    symbol: Optional[str] = Field(
+        default=None, description="交易对 (如 BTCUSDT), 不传则返回所有持仓"
+    ),
+) -> str:
     """
     查询币安 USDT 合约持仓信息
 
@@ -496,10 +499,6 @@ def binance_get_positions(params: Any = None) -> str:
     """
     try:
         client = _get_client()
-
-        # 解析参数
-        parsed = _parse_params(params, GetPositionsInput)
-        symbol = parsed.symbol
 
         if symbol:
             result = client.get_position_risk(symbol=symbol)
@@ -543,7 +542,10 @@ def binance_get_positions(params: Any = None) -> str:
         "openWorldHint": True,
     },
 )
-def binance_change_leverage(params: ChangeLeverageInput) -> str:
+def binance_change_leverage(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+    leverage: int = Field(..., description="杠杆倍数 (1-125)", ge=1, le=125),
+) -> str:
     """
     设置交易对的杠杆倍数
 
@@ -558,8 +560,8 @@ def binance_change_leverage(params: ChangeLeverageInput) -> str:
     try:
         client = _get_client()
         result = client.change_leverage(
-            symbol=params.symbol,
-            leverage=params.leverage,
+            symbol=symbol.upper().strip(),
+            leverage=leverage,
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
     except Exception as e:
@@ -576,7 +578,12 @@ def binance_change_leverage(params: ChangeLeverageInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_change_margin_type(params: ChangeMarginTypeInput) -> str:
+def binance_change_margin_type(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+    margin_type: MarginType = Field(
+        ..., description="保证金模式: ISOLATED(逐仓) 或 CROSSED(全仓)"
+    ),
+) -> str:
     """
     设置交易对的保证金模式
 
@@ -589,8 +596,8 @@ def binance_change_margin_type(params: ChangeMarginTypeInput) -> str:
     try:
         client = _get_client()
         result = client.change_margin_type(
-            symbol=params.symbol,
-            marginType=params.margin_type.value,
+            symbol=symbol.upper().strip(),
+            marginType=margin_type.value,
         )
         return json.dumps(result, indent=2, ensure_ascii=False)
     except Exception as e:
@@ -607,7 +614,48 @@ def binance_change_margin_type(params: ChangeMarginTypeInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_place_order(params: PlaceOrderInput) -> str:
+def binance_place_order(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+    side: OrderSide = Field(
+        ..., description="订单方向: BUY(买入/做多) 或 SELL(卖出/做空)"
+    ),
+    order_type: OrderType = Field(
+        default=OrderType.MARKET,
+        description="订单类型",
+        alias="type",
+    ),
+    quantity: Optional[float] = Field(default=None, description="下单数量"),
+    price: Optional[float] = Field(default=None, description="限价单价格", gt=0),
+    position_side: PositionSide = Field(
+        default=PositionSide.BOTH,
+        description="持仓方向 (对冲模式使用)",
+        alias="positionSide",
+    ),
+    time_in_force: TimeInForce = Field(
+        default=TimeInForce.GTC, description="订单有效期", alias="timeInForce"
+    ),
+    good_till_date: Optional[int] = Field(
+        default=None,
+        description="GTD 订单自动取消时间 (Unix 时间戳, 毫秒). 仅当 timeInForce=GTD 时有效",
+        alias="goodTillDate",
+    ),
+    reduce_only: bool = Field(
+        default=False, description="是否只减仓", alias="reduceOnly"
+    ),
+    stop_price: Optional[float] = Field(
+        default=None, description="止损/止盈触发价格", alias="stopPrice", gt=0
+    ),
+    working_type: WorkingType = Field(
+        default=WorkingType.CONTRACT_PRICE,
+        description="触发价格类型",
+        alias="workingType",
+    ),
+    close_position: bool = Field(
+        default=False,
+        description="是否全部平仓 (用于止损/止盈单)",
+        alias="closePosition",
+    ),
+) -> str:
     """
     币安 USDT 合约下单
 
@@ -643,54 +691,64 @@ def binance_place_order(params: PlaceOrderInput) -> str:
     """
     try:
         client = _get_client()
+        symbol_upper = symbol.upper().strip()
 
         # 自动确定 positionSide (仅开仓时自动设置, reduceOnly 平仓时需要正确的方向)
-        position_side = params.position_side
-        if not params.reduce_only and not params.close_position:
+        actual_position_side = position_side
+        if not reduce_only and not close_position:
             # 开仓时自动设置
-            position_side = _auto_position_side(
-                client, params.side, params.position_side
-            )
+            actual_position_side = _auto_position_side(client, side, position_side)
 
         order_params: dict[str, Any] = {
-            "symbol": params.symbol,
-            "side": params.side.value,
-            "type": params.order_type.value,
-            "positionSide": position_side.value,
+            "symbol": symbol_upper,
+            "side": side.value,
+            "type": order_type.value,
+            "positionSide": actual_position_side.value,
         }
 
-        if params.quantity is not None:
-            order_params["quantity"] = params.quantity
+        if quantity is not None:
+            order_params["quantity"] = quantity
 
         # 限价单需要价格和有效期
-        if params.order_type in (
+        if order_type in (
             OrderType.LIMIT,
             OrderType.STOP,
             OrderType.TAKE_PROFIT,
         ):
-            if params.price is None:
+            if price is None:
                 return "Error: 限价单必须指定 price"
-            order_params["price"] = params.price
+            order_params["price"] = price
 
             # 判断是否为开仓限价单 (非 reduceOnly, 非 closePosition, 类型为 LIMIT)
             is_open_limit_order = (
-                params.order_type == OrderType.LIMIT
-                and not params.reduce_only
-                and not params.close_position
+                order_type == OrderType.LIMIT and not reduce_only and not close_position
             )
 
             # 开仓限价单: 默认使用 GTD + 1 小时有效期
             if is_open_limit_order:
-                import time
+                import time as time_module
 
-                time_in_force = params.time_in_force
-                good_till_date = params.good_till_date
+                actual_time_in_force = time_in_force
+                actual_good_till_date = good_till_date
 
                 # 如果未指定 timeInForce 或使用默认 GTC, 自动改为 GTD + 1 小时
-                if time_in_force == TimeInForce.GTC and good_till_date is None:
-                    time_in_force = TimeInForce.GTD
-                    good_till_date = int(time.time() * 1000) + 3600 * 1000  # 1 小时后
+                if (
+                    actual_time_in_force == TimeInForce.GTC
+                    and actual_good_till_date is None
+                ):
+                    actual_time_in_force = TimeInForce.GTD
+                    actual_good_till_date = int(time_module.time() * 1000) + 3600 * 1000
 
+                order_params["timeInForce"] = actual_time_in_force.value
+
+                if actual_time_in_force == TimeInForce.GTD:
+                    if actual_good_till_date is None:
+                        return (
+                            "Error: GTD 订单必须指定 goodTillDate (Unix 时间戳, 毫秒)"
+                        )
+                    order_params["goodTillDate"] = actual_good_till_date
+            else:
+                # 平仓限价单或止损止盈限价单: 使用用户指定的 timeInForce
                 order_params["timeInForce"] = time_in_force.value
 
                 if time_in_force == TimeInForce.GTD:
@@ -699,33 +757,23 @@ def binance_place_order(params: PlaceOrderInput) -> str:
                             "Error: GTD 订单必须指定 goodTillDate (Unix 时间戳, 毫秒)"
                         )
                     order_params["goodTillDate"] = good_till_date
-            else:
-                # 平仓限价单或止损止盈限价单: 使用用户指定的 timeInForce
-                order_params["timeInForce"] = params.time_in_force.value
-
-                if params.time_in_force == TimeInForce.GTD:
-                    if params.good_till_date is None:
-                        return (
-                            "Error: GTD 订单必须指定 goodTillDate (Unix 时间戳, 毫秒)"
-                        )
-                    order_params["goodTillDate"] = params.good_till_date
 
         # 止损/止盈单需要触发价格
-        if params.order_type in (
+        if order_type in (
             OrderType.STOP,
             OrderType.STOP_MARKET,
             OrderType.TAKE_PROFIT,
             OrderType.TAKE_PROFIT_MARKET,
         ):
-            if params.stop_price is None:
+            if stop_price is None:
                 return "Error: 止损/止盈单必须指定 stopPrice"
-            order_params["stopPrice"] = params.stop_price
-            order_params["workingType"] = params.working_type.value
+            order_params["stopPrice"] = stop_price
+            order_params["workingType"] = working_type.value
 
         # 平仓相关 (单向持仓模式才需要 reduceOnly, 对冲模式不支持)
-        if params.reduce_only and position_side == PositionSide.BOTH:
+        if reduce_only and actual_position_side == PositionSide.BOTH:
             order_params["reduceOnly"] = "true"
-        if params.close_position:
+        if close_position:
             order_params["closePosition"] = "true"
 
         result = client.new_order(**order_params)
@@ -744,7 +792,17 @@ def binance_place_order(params: PlaceOrderInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_close_position(params: ClosePositionInput) -> str:
+def binance_close_position(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+    position_side: PositionSide = Field(
+        default=PositionSide.BOTH,
+        description="持仓方向 (对冲模式使用)",
+        alias="positionSide",
+    ),
+    quantity: Optional[float] = Field(
+        default=None, description="平仓数量, 不传则全部平仓", gt=0
+    ),
+) -> str:
     """
     平仓指定交易对的持仓
 
@@ -755,19 +813,20 @@ def binance_close_position(params: ClosePositionInput) -> str:
     """
     try:
         client = _get_client()
+        symbol_upper = symbol.upper().strip()
 
         # 先获取当前持仓
-        positions = client.get_position_risk(symbol=params.symbol)
+        positions = client.get_position_risk(symbol=symbol_upper)
 
         # 找到对应的持仓
         target_position = None
         for pos in positions:
-            if pos.get("positionSide") == params.position_side.value:
+            if pos.get("positionSide") == position_side.value:
                 position_amt = Decimal(pos.get("positionAmt", "0"))
                 if position_amt != 0:
                     target_position = pos
                     break
-            elif params.position_side == PositionSide.BOTH:
+            elif position_side == PositionSide.BOTH:
                 position_amt = Decimal(pos.get("positionAmt", "0"))
                 if position_amt != 0:
                     target_position = pos
@@ -775,28 +834,28 @@ def binance_close_position(params: ClosePositionInput) -> str:
 
         if not target_position:
             return json.dumps(
-                {"message": f"未找到 {params.symbol} 的持仓"}, ensure_ascii=False
+                {"message": f"未找到 {symbol_upper} 的持仓"}, ensure_ascii=False
             )
 
         position_amt = Decimal(target_position.get("positionAmt", "0"))
-        close_quantity = params.quantity if params.quantity else abs(position_amt)
+        close_quantity = quantity if quantity else abs(position_amt)
 
         # 确定平仓方向
         if position_amt > 0:
-            side = OrderSide.SELL  # 多仓用卖单平仓
+            close_side = OrderSide.SELL  # 多仓用卖单平仓
         else:
-            side = OrderSide.BUY  # 空仓用买单平仓
+            close_side = OrderSide.BUY  # 空仓用买单平仓
 
         # 执行平仓
         order_params: dict[str, Any] = {
-            "symbol": params.symbol,
-            "side": side.value,
+            "symbol": symbol_upper,
+            "side": close_side.value,
             "type": OrderType.MARKET.value,
             "quantity": float(close_quantity),
-            "positionSide": params.position_side.value,
+            "positionSide": position_side.value,
         }
         # 单向持仓模式才需要 reduceOnly
-        if params.position_side == PositionSide.BOTH:
+        if position_side == PositionSide.BOTH:
             order_params["reduceOnly"] = "true"
 
         result = client.new_order(**order_params)
@@ -815,7 +874,25 @@ def binance_close_position(params: ClosePositionInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_set_stop_loss_take_profit(params: SetStopLossTakeProfitInput) -> str:
+def binance_set_stop_loss_take_profit(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+    position_side: PositionSide = Field(
+        default=PositionSide.BOTH,
+        description="持仓方向",
+        alias="positionSide",
+    ),
+    stop_loss_price: Optional[float] = Field(
+        default=None, description="止损触发价格", alias="stopLossPrice", gt=0
+    ),
+    take_profit_price: Optional[float] = Field(
+        default=None, description="止盈触发价格", alias="takeProfitPrice", gt=0
+    ),
+    working_type: WorkingType = Field(
+        default=WorkingType.CONTRACT_PRICE,
+        description="触发价格类型",
+        alias="workingType",
+    ),
+) -> str:
     """
     为当前持仓设置止损止盈订单 (使用 Algo Order API)
 
@@ -827,24 +904,25 @@ def binance_set_stop_loss_take_profit(params: SetStopLossTakeProfitInput) -> str
 
     注意: 至少需要设置一个价格 (止损或止盈)
     """
-    if params.stop_loss_price is None and params.take_profit_price is None:
+    if stop_loss_price is None and take_profit_price is None:
         return "Error: 至少需要设置 stopLossPrice 或 takeProfitPrice"
 
     try:
         client = _get_client()
+        symbol_upper = symbol.upper().strip()
 
         # 获取当前持仓
-        positions = client.get_position_risk(symbol=params.symbol)
+        positions = client.get_position_risk(symbol=symbol_upper)
 
         # 找到对应的持仓
         target_position = None
         for pos in positions:
-            if pos.get("positionSide") == params.position_side.value:
+            if pos.get("positionSide") == position_side.value:
                 position_amt = Decimal(pos.get("positionAmt", "0"))
                 if position_amt != 0:
                     target_position = pos
                     break
-            elif params.position_side == PositionSide.BOTH:
+            elif position_side == PositionSide.BOTH:
                 position_amt = Decimal(pos.get("positionAmt", "0"))
                 if position_amt != 0:
                     target_position = pos
@@ -852,21 +930,21 @@ def binance_set_stop_loss_take_profit(params: SetStopLossTakeProfitInput) -> str
 
         if not target_position:
             return json.dumps(
-                {"message": f"未找到 {params.symbol} 的持仓, 无法设置止损止盈"},
+                {"message": f"未找到 {symbol_upper} 的持仓, 无法设置止损止盈"},
                 ensure_ascii=False,
             )
 
         position_amt = Decimal(target_position.get("positionAmt", "0"))
-        quantity = abs(position_amt)
+        pos_quantity = abs(position_amt)
         results = []
 
         # 确定止损止盈方向
         if position_amt > 0:
             # 多仓: 止损用卖单, 止盈用卖单
-            side = OrderSide.SELL
+            sltp_side = OrderSide.SELL
         else:
             # 空仓: 止损用买单, 止盈用买单
-            side = OrderSide.BUY
+            sltp_side = OrderSide.BUY
 
         # 使用新的 Algo Order API (2025-12-09 迁移后)
         # POST /fapi/v1/algoOrder
@@ -875,32 +953,32 @@ def binance_set_stop_loss_take_profit(params: SetStopLossTakeProfitInput) -> str
         algo_url = "/fapi/v1/algoOrder"
 
         # 设置止损
-        if params.stop_loss_price:
+        if stop_loss_price:
             sl_params = {
                 "algoType": "CONDITIONAL",
-                "symbol": params.symbol,
-                "side": side.value,
-                "positionSide": params.position_side.value,
+                "symbol": symbol_upper,
+                "side": sltp_side.value,
+                "positionSide": position_side.value,
                 "type": "STOP_MARKET",
-                "quantity": float(quantity),
-                "triggerPrice": params.stop_loss_price,
-                "workingType": params.working_type.value,
+                "quantity": float(pos_quantity),
+                "triggerPrice": stop_loss_price,
+                "workingType": working_type.value,
                 "timestamp": int(time.time() * 1000),
             }
             sl_result = client.sign_request("POST", algo_url, sl_params)
             results.append({"type": "STOP_LOSS", "order": sl_result})
 
         # 设置止盈
-        if params.take_profit_price:
+        if take_profit_price:
             tp_params = {
                 "algoType": "CONDITIONAL",
-                "symbol": params.symbol,
-                "side": side.value,
-                "positionSide": params.position_side.value,
+                "symbol": symbol_upper,
+                "side": sltp_side.value,
+                "positionSide": position_side.value,
                 "type": "TAKE_PROFIT_MARKET",
-                "quantity": float(quantity),
-                "triggerPrice": params.take_profit_price,
-                "workingType": params.working_type.value,
+                "quantity": float(pos_quantity),
+                "triggerPrice": take_profit_price,
+                "workingType": working_type.value,
                 "timestamp": int(time.time() * 1000),
             }
             tp_result = client.sign_request("POST", algo_url, tp_params)
@@ -921,7 +999,15 @@ def binance_set_stop_loss_take_profit(params: SetStopLossTakeProfitInput) -> str
         "openWorldHint": True,
     },
 )
-def binance_cancel_order(params: CancelOrderInput) -> str:
+def binance_cancel_order(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+    order_id: Optional[int] = Field(
+        default=None, description="订单ID", alias="orderId"
+    ),
+    client_order_id: Optional[str] = Field(
+        default=None, description="客户端订单ID", alias="origClientOrderId"
+    ),
+) -> str:
     """
     撤销指定订单
 
@@ -930,17 +1016,18 @@ def binance_cancel_order(params: CancelOrderInput) -> str:
     - orderId: 订单ID (二选一)
     - origClientOrderId: 客户端订单ID (二选一)
     """
-    if params.order_id is None and params.client_order_id is None:
+    if order_id is None and client_order_id is None:
         return "Error: 必须指定 orderId 或 origClientOrderId"
 
     try:
         client = _get_client()
+        symbol_upper = symbol.upper().strip()
 
-        cancel_params: dict[str, Any] = {"symbol": params.symbol}
-        if params.order_id:
-            cancel_params["orderId"] = params.order_id
-        if params.client_order_id:
-            cancel_params["origClientOrderId"] = params.client_order_id
+        cancel_params: dict[str, Any] = {"symbol": symbol_upper}
+        if order_id:
+            cancel_params["orderId"] = order_id
+        if client_order_id:
+            cancel_params["origClientOrderId"] = client_order_id
 
         result = client.cancel_order(**cancel_params)
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -958,7 +1045,9 @@ def binance_cancel_order(params: CancelOrderInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_cancel_all_orders(params: CancelAllOrdersInput) -> str:
+def binance_cancel_all_orders(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+) -> str:
     """
     撤销指定交易对的所有挂单
 
@@ -967,7 +1056,7 @@ def binance_cancel_all_orders(params: CancelAllOrdersInput) -> str:
     """
     try:
         client = _get_client()
-        result = client.cancel_open_orders(symbol=params.symbol)
+        result = client.cancel_open_orders(symbol=symbol.upper().strip())
         return json.dumps(result, indent=2, ensure_ascii=False)
     except Exception as e:
         return _handle_error(e)
@@ -983,7 +1072,11 @@ def binance_cancel_all_orders(params: CancelAllOrdersInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_get_open_orders(params: GetOpenOrdersInput = GetOpenOrdersInput()) -> str:
+def binance_get_open_orders(
+    symbol: Optional[str] = Field(
+        default=None, description="交易对 (如 BTCUSDT), 不传则返回所有挂单"
+    ),
+) -> str:
     """
     查询当前挂单
 
@@ -1003,8 +1096,8 @@ def binance_get_open_orders(params: GetOpenOrdersInput = GetOpenOrdersInput()) -
 
         # 使用 get_orders() 方法查询所有挂单 (对应 /fapi/v1/openOrders)
         # 注意: get_open_orders() 是查询单个订单 (对应 /fapi/v1/openOrder)
-        if params.symbol:
-            result = client.get_orders(symbol=params.symbol.upper())
+        if symbol:
+            result = client.get_orders(symbol=symbol.upper())
         else:
             result = client.get_orders()
 
@@ -1045,7 +1138,9 @@ def binance_get_open_orders(params: GetOpenOrdersInput = GetOpenOrdersInput()) -
     },
 )
 def binance_get_open_algo_orders(
-    params: GetOpenAlgoOrdersInput = GetOpenAlgoOrdersInput(),
+    symbol: Optional[str] = Field(
+        default=None, description="交易对 (如 BTCUSDT), 不传则返回所有条件单"
+    ),
 ) -> str:
     """
     查询当前条件单 (止盈止损等 Algo Orders)
@@ -1067,8 +1162,8 @@ def binance_get_open_algo_orders(
         query_params: dict[str, Any] = {
             "timestamp": int(time.time() * 1000),
         }
-        if params.symbol:
-            query_params["symbol"] = params.symbol.upper()
+        if symbol:
+            query_params["symbol"] = symbol.upper()
 
         result = client.sign_request("GET", algo_url, query_params)
 
@@ -1108,7 +1203,15 @@ def binance_get_open_algo_orders(
         "openWorldHint": True,
     },
 )
-def binance_cancel_algo_order(params: CancelAlgoOrderInput) -> str:
+def binance_cancel_algo_order(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+    algo_id: Optional[int] = Field(
+        default=None, description="条件单ID", alias="algoId"
+    ),
+    client_algo_id: Optional[str] = Field(
+        default=None, description="客户端条件单ID", alias="clientAlgoId"
+    ),
+) -> str:
     """
     撤销指定条件单 (止盈止损等 Algo Order)
 
@@ -1123,22 +1226,23 @@ def binance_cancel_algo_order(params: CancelAlgoOrderInput) -> str:
     - symbol: 交易对
     - orderType: 订单类型
     """
-    if params.algo_id is None and params.client_algo_id is None:
+    if algo_id is None and client_algo_id is None:
         return "Error: 必须指定 algoId 或 clientAlgoId"
 
     try:
         client = _get_client()
         import time
 
+        symbol_upper = symbol.upper().strip()
         algo_url = "/fapi/v1/algoOrder"
         cancel_params: dict[str, Any] = {
-            "symbol": params.symbol,
+            "symbol": symbol_upper,
             "timestamp": int(time.time() * 1000),
         }
-        if params.algo_id:
-            cancel_params["algoId"] = params.algo_id
-        if params.client_algo_id:
-            cancel_params["clientAlgoId"] = params.client_algo_id
+        if algo_id:
+            cancel_params["algoId"] = algo_id
+        if client_algo_id:
+            cancel_params["clientAlgoId"] = client_algo_id
 
         result = client.sign_request("DELETE", algo_url, cancel_params)
         return json.dumps(result, indent=2, ensure_ascii=False)
@@ -1156,7 +1260,9 @@ def binance_cancel_algo_order(params: CancelAlgoOrderInput) -> str:
         "openWorldHint": True,
     },
 )
-def binance_cancel_all_algo_orders(params: CancelAllAlgoOrdersInput) -> str:
+def binance_cancel_all_algo_orders(
+    symbol: str = Field(..., description="交易对, 如 BTCUSDT"),
+) -> str:
     """
     撤销指定交易对的所有条件单 (止盈止损等 Algo Orders)
 
@@ -1171,18 +1277,20 @@ def binance_cancel_all_algo_orders(params: CancelAllAlgoOrdersInput) -> str:
         client = _get_client()
         import time
 
+        symbol_upper = symbol.upper().strip()
+
         # 币安没有批量撤销 Algo Order 的 API, 需要先查询再逐个撤销
         # Step 1: 查询所有条件单
         query_url = "/fapi/v1/openAlgoOrders"
         query_params: dict[str, Any] = {
-            "symbol": params.symbol,
+            "symbol": symbol_upper,
             "timestamp": int(time.time() * 1000),
         }
         algo_orders = client.sign_request("GET", query_url, query_params)
 
         if not algo_orders:
             return json.dumps(
-                {"code": 200, "msg": f"当前 {params.symbol} 无条件单"},
+                {"code": 200, "msg": f"当前 {symbol_upper} 无条件单"},
                 ensure_ascii=False,
             )
 
@@ -1190,20 +1298,20 @@ def binance_cancel_all_algo_orders(params: CancelAllAlgoOrdersInput) -> str:
         cancel_url = "/fapi/v1/algoOrder"
         results = []
         for order in algo_orders:
-            algo_id = order.get("algoId")
-            if algo_id:
+            order_algo_id = order.get("algoId")
+            if order_algo_id:
                 cancel_params: dict[str, Any] = {
-                    "symbol": params.symbol,
-                    "algoId": algo_id,
+                    "symbol": symbol_upper,
+                    "algoId": order_algo_id,
                     "timestamp": int(time.time() * 1000),
                 }
                 try:
                     cancel_result = client.sign_request(
                         "DELETE", cancel_url, cancel_params
                     )
-                    results.append({"algoId": algo_id, "status": "CANCELED"})
+                    results.append({"algoId": order_algo_id, "status": "CANCELED"})
                 except Exception as e:
-                    results.append({"algoId": algo_id, "error": str(e)})
+                    results.append({"algoId": order_algo_id, "error": str(e)})
 
         return json.dumps(
             {
