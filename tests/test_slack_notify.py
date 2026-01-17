@@ -10,18 +10,16 @@ slack_notify MCP 集成测试
 
 import pytest
 
-from mcps.slack_notify import SendMessageInput, slack_send_message
+from mcps.slack_notify import slack_send_message
 
 
 # @pytest.mark.skip(reason="需要手动运行, 避免频繁发送消息")
 def test_slack_send_message():
     """测试发送 Slack 消息"""
     result = slack_send_message.fn(
-        SendMessageInput(
-            text="[测试] MCP 单元测试消息",
-            username="TestBot",
-            icon_emoji=":test_tube:",
-        )
+        text="[测试] MCP 单元测试消息",
+        username="TestBot",
+        icon_emoji=":test_tube:",
     )
     print(f"\n发送结果: {result}")
     assert result.success is True
